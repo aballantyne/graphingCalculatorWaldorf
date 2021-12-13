@@ -14,7 +14,7 @@ public class controller : MonoBehaviour
     public float distance = 100.0f; 
     public float scaleY = 1.0f;
     LineRenderer lineRenderer;
-    // Start is called before the first frame update
+    
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
