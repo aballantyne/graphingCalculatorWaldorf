@@ -8,7 +8,7 @@ public class controller : MonoBehaviour
 {
     const int TOTAL_POINTS = 64; 
     const float DISTANCE_START = 100.0f; 
-    
+
     public string input = "y=x*x";
 
     public float distance = 100.0f; 
@@ -42,7 +42,6 @@ public class controller : MonoBehaviour
         lineRenderer.SetPositions(CalculateLine());
 
     }
-    // bug it gets flatter and flater the closer it is rto the ground 
     Vector3[] CalculateLine(){
 
         string str = input.Split('=')[1];
