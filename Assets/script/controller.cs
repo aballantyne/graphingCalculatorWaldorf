@@ -7,10 +7,12 @@ using System;
 public class controller : MonoBehaviour
 {
     const int TOTAL_POINTS = 64; 
-    string input = "y=x";
+    const float DISTANCE_START = 100.0f; 
+    
+    public string input = "y=x*x";
 
-    public float distance = 20; 
-
+    public float distance = 100.0f; 
+    public float scaleY = 1.0f;
     LineRenderer lineRenderer;
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,8 @@ public class controller : MonoBehaviour
     {
         if (Input.mouseScrollDelta.y != 0 ){
             distance += Input.mouseScrollDelta.y; 
-            if (distance<0)distance = 0.1f;
+            if (distance<0.1f)distance = 0.1f;
+            scaleY = DISTANCE_START /distance; 
             RenderLine();
         }
     }
@@ -39,20 +42,25 @@ public class controller : MonoBehaviour
         lineRenderer.SetPositions(CalculateLine());
 
     }
+    // bug it gets flatter and flater the closer it is rto the ground 
     Vector3[] CalculateLine(){
 
         string str = input.Split('=')[1];
 
         Vector3[] points = new Vector3[TOTAL_POINTS]; 
 
-        float x = -distance/2f; 
+        float newX = -distance/2f; 
         float increment = distance/TOTAL_POINTS;
 
         for (int i = 0; i < TOTAL_POINTS; i++){
-            float newX = i/3.2f - 10 ;
-            float newY = Eval(str.Replace("x",  Convert.ToString(x))); 
+            float newY = Eval(str.Replace("x",  Convert.ToString(newX))); 
             points[i] = new Vector3(newX,newY);
-            x+= increment;
+            newX+= increment;
+        }
+        for (int i = 0; i < TOTAL_POINTS; i++){
+            
+            points[i] *= scaleY;
+            
         }
         return points;
     }
