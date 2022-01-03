@@ -39,39 +39,44 @@ public class controller : MonoBehaviour
         foreach (GameObject obj in equationList)
             {
                 if (obj != null)
-                    obj.GetComponent<equation>().RenderLine(); 
+                    obj.GetComponent<equation>().UpdateInput(); 
             }
     }
     void CreateEquation(){
         int indexUI = itemList.Count; 
         int indexObj = equationList.Count; 
         GameObject newObj = Instantiate(equationOBJ, new Vector3(0, 0, 0), Quaternion.identity);
-        equationList.AddLast(newObj); 
         newObj.name = String.Format("equationGameObject({0})",index);
 
         GameObject newUI = Instantiate(equationUI, canvas);
         itemList.AddLast(newUI);
-
         newUI.transform.SetParent(canvas);
+        newUI.transform.localPosition = new Vector2(-20, 180 - (80 * index));
+        equationList.AddLast(newObj); 
+
         newUI.name = String.Format("equationUI({0})",index);
-        newUI.transform.position = new Vector2(97.5f, 400 - (80 * index));
         newUI.GetComponent<equationUI>().obj = newObj; 
         newUI.GetComponent<equationUI>().controller = gameObject; 
         newUI.GetComponent<equationUI>().indexUI = indexUI;
         newUI.GetComponent<equationUI>().indexObj = indexObj;  
 
+        newObj.GetComponent<equation>().uiController = newUI;
         index++;
     }
-    void CreateVariable(){
+    void  CreateVariable(){
         GameObject newUI = Instantiate(variableUI, canvas);
 
         newUI.transform.SetParent(canvas);
         newUI.name = String.Format("variableUI({0})",index);
-        newUI.transform.position = new Vector2(148, 400 - (80 * index));
+        newUI.transform.localPosition = new Vector2(0, 170 - (80 * index));
+        newUI.GetComponent<variableUI>().controller = gameObject; 
+        newUI.GetComponent<variableUI>().isFirst = index == 0;
+
+        itemList.AddLast(newUI); 
         index++;
     }
     public void UpdatePositions() { 
-        Debug.Log(false);
+        
         UpdatePositions(false);
     }
     public void UpdatePositions(bool removeFirst){
@@ -84,9 +89,23 @@ public class controller : MonoBehaviour
         {
             if (obj != null || removeFirst){
                 removeFirst= false; 
-                obj.transform.position = new Vector2(97.5f, 400 - (80 * (i-1)));
                 if (obj.GetComponent<equationUI>() != null){
                     newEquationList.AddLast(obj.GetComponent<equationUI>().obj);
+                    if (i != 0 ){
+                        obj.transform.localPosition = new Vector2(-20, 180 - (80 * (i-1)));
+                    }else {
+                        obj.transform.localPosition = new Vector2(-20, 180 - (80 * (i)));
+
+                    }
+                }
+                if (obj.GetComponent<variableUI>() != null) {
+                    if (i != 0 ){
+                        obj.transform.localPosition = new Vector2(0, 180 - (80 * (i-1)));
+                    }else {
+                        obj.transform.localPosition = new Vector2(0, 180 - (80 * (i)));
+
+                    }
+                    
                 }
                 newItemList.AddLast(obj);
                 i++;

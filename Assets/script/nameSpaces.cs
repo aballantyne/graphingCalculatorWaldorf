@@ -43,18 +43,31 @@ namespace Common.Utility
         }
         public static bool IsInputValid(string input, bool notVariable){
             bool isValid = true; 
+            if(input == null )return false;
             if (input.Contains('=')){
+                Debug.Log("Contains '='");
+                //if(input.Split('=')[1] == String.Empty)return false;
                 input = Format.RemoveWhitespace(input);
                 char[]  expression = input.Split('=')[1].ToCharArray(); 
                 for (int i = 0; i < expression.Length; i++)
                 {
                     if (!(Char.IsLetter(expression[i])) && !(Char.IsNumber(expression[i]))){ 
-                        if (i == 0 || i == expression.Length-1|| !Format.ContainsArray(Format.operations,expression[i]) && expression[i] != '.') 
-                            isValid = false;   
+                        if (i == 0 && Format.ContainsArray(Format.operations,expression[i]) && expression[i] != '-') 
+                            isValid = false;  
+                        if (i == expression.Length-1 && Format.ContainsArray(Format.operations,expression[i]))
+                            isValid = false;  
+                        if (!Format.ContainsArray(Format.operations,expression[i]) && expression[i] != '.')
+                            isValid = false;  
+                        if (i != expression.Length-1 && expression[i] == '-' && Format.ContainsArray(Format.operations,expression[i+1]))
+                            isValid = false; 
+                            //+*
+                        if (i != expression.Length-1 && expression[i+1] != '-' && Format.ContainsArray(Format.operations,expression[i]) && Format.ContainsArray(Format.operations,expression[i+1] ))
+                            isValid = false; 
+
                     }
-                    if (Char.IsLetter(expression[i])&& !Format.ContainsList(Math.variables.Keys.ToList(),Convert.ToString(expression[i])) && expression[i] != 'x' && expression[i] != 'y') isValid = false;
+                    if (Char.IsLetter(expression[i])&& !Format.ContainsList(Math.variables.Keys.ToList(),Convert.ToString(expression[i])) && expression[i] != 'x') isValid = false;
                     
-                    if (i != 0 && Char.IsNumber(expression[i]) && Char.IsLetter(expression[i-1])) isValid = false;; 
+                    if (i != 0 && Char.IsNumber(expression[i]) && Char.IsLetter(expression[i-1])) isValid = false; 
                 }
 
                 if (input.Split('=')[1] == String.Empty) isValid = false; 
@@ -117,6 +130,7 @@ namespace Common.Utility
             {
                 input = input.Replace(item,Convert.ToString(variables[item]));
             }
+            input = input.Replace("--","+");
             return input; 
         }
     }

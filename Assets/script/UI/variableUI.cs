@@ -14,6 +14,10 @@ public class variableUI : MonoBehaviour
     public float value;
 
     public string letter; 
+
+    public GameObject controller;
+
+    public bool isFirst = true;  
     // Start is called before the first frame update
     void Start()
     {
@@ -43,8 +47,15 @@ public class variableUI : MonoBehaviour
                 Math.variables.Add (letter,value);
 
             }
-            Debug.Log(Math.variables[letter]);
+            controller.GetComponent<controller>().UpdateRender();
         }
+        
+    }
+    void DestroyGameObject(){
+        Math.variables.Remove(letter);
+        Destroy(gameObject);
+        controller.GetComponent<controller>().UpdatePositions();
+        controller.GetComponent<controller>().UpdateRender();
     }
     
 }

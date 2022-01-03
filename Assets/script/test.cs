@@ -10,7 +10,8 @@ using Math=Common.Utility.Math;
 
 public class test : MonoBehaviour
 {
-    public string Input, output;
+    public string Input = "y=";
+    public float output;
     public bool isValid; 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,10 @@ public class test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        output = Math.ReplaceVariables(Math.InsertAsterisk(Input));
-        isValid = Math.IsInputValid(output);
+        output = Math.Eval(Math.ReplaceVariables(
+                Math.InsertAsterisk( 
+                Math.FixFloat( 
+                Format.RemoveWhitespace(Input.Split('=')[1])))));
+        isValid = Math.IsInputValid(Math.ReplaceVariables(Math.InsertAsterisk(Input)));
     }
 }

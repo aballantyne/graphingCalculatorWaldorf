@@ -36,10 +36,9 @@ public class equationUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void UpdateInput()
+    public void UpdateInput()
     {
-        
-        if (Math.IsInputValid(Math.FixFloat(INPUTFIELD.text))) { 
+        if (Math.IsInputValid(Math.FixFloat(Format.RemoveWhitespace((INPUTFIELD.text))))) { 
             string Input = 
                 Math.ReplaceVariables(
                 Math.InsertAsterisk( 
@@ -52,5 +51,9 @@ public class equationUI : MonoBehaviour
         } 
          
     }
-    
+    void DestroyGameObject(){
+        Destroy(gameObject);
+        Destroy(obj);
+        controller.GetComponent<controller>().UpdatePositions(indexUI == 0);
+    }
 }

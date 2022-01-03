@@ -15,19 +15,25 @@ public class equation : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    string INPUT; 
+    string INPUT = ""; 
+
+    public GameObject uiController; 
 
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = TOTAL_POINTS;
     }
-    
-    public void RenderLine(){
+    public void UpdateInput(){
+        uiController.GetComponent<equationUI>().UpdateInput();
+    }
+    public void RenderLine(){ 
         RenderLine(INPUT);
     }
     public void RenderLine(string input){
+        
         INPUT = input;
+        if (INPUT != String.Empty)
         lineRenderer.SetPositions(CalculateLine(input));
     }
     Vector3[] CalculateLine(string input){
@@ -39,7 +45,7 @@ public class equation : MonoBehaviour
 
         for (int i = 0; i < TOTAL_POINTS; i++){
             string newEquation = input;
-            
+            Debug.Log(input);
             newEquation = newEquation.Replace("x",Convert.ToString(newX));
             float newY = Math.Eval(newEquation); 
             points[i] = new Vector3(newX,newY);
